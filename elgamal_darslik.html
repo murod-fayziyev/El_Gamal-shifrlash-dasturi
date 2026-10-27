@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ElGamal shifrlash algoritmi — o'quv qo'llanma</title>
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--tx:#1b2233;--mu:#5a6478;--ac:#27408b;--rs:#27408b;--ok:#2b8a3e;--ln:#d9deea;--cd:#eef1f8;--c1:#d9730d;--c2:#0b8a6a;--er:#d6336c}
+@media(prefers-color-scheme:dark){:root{--bg:#12151f;--card:#1b2030;--tx:#e6e9f2;--mu:#98a1b8;--ac:#8da4ff;--rs:#4c6ef5;--ok:#69db7c;--ln:#2d3550;--cd:#242b42;--c1:#ffa94d;--c2:#38d9a9;--er:#ff8fab}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--tx);line-height:1.65}
+.hd{background:var(--ac);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.hd h1{margin:0;font-size:1.45rem}.hd .sub{opacity:.85;font-size:.92rem}.hd button{background:#fff;color:#27408b}
+.stu{max-width:1100px;margin:12px auto 0;padding:0 16px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:.92rem;color:var(--mu)}
+.stu input{border:0;border-bottom:1px solid var(--ln);border-radius:0;background:transparent;padding:3px 4px;width:200px}
+.lay{max-width:1100px;margin:12px auto;padding:0 16px 50px;display:grid;grid-template-columns:210px 1fr;gap:18px}
+aside{position:sticky;top:10px;align-self:start}
+nav button{display:block;width:100%;text-align:left;margin:0 0 5px;background:var(--card);color:var(--tx);border:1px solid var(--ln);font-weight:500}
+nav button.on{background:var(--rs);color:#fff;border-color:var(--rs)}nav b{opacity:.6;margin-right:6px}
+.prog{height:6px;background:var(--ln);border-radius:9px;overflow:hidden;margin-top:8px}.prog i{display:block;height:100%;width:0;background:var(--rs);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:16px 20px;margin-bottom:14px}
+h2{color:var(--ac);margin:0 0 10px;font-size:1.3rem;border-bottom:2px solid var(--ln);padding-bottom:6px}h3{margin:14px 0 4px;font-size:1.02rem}
+.les{display:none}.les.on{display:block}
+.goal{background:var(--cd);border-left:4px solid var(--ac);padding:8px 14px;border-radius:6px;margin:8px 0;font-size:.93rem}.goal ul{margin:4px 0;padding-left:20px}
+.fm{text-align:center;font-family:Cambria,'Times New Roman',serif;font-size:1.12rem;padding:8px;background:var(--cd);border-radius:8px;margin:8px 0}
+.key{border:1px solid var(--ok);border-radius:8px;padding:8px 14px;margin:12px 0 0;font-size:.93rem}.key b{color:var(--ok)}
+.lab{border:1px solid var(--ln);border-top:3px solid var(--c2);border-radius:8px;padding:10px 14px;margin:12px 0}.lab>b{color:var(--c2)}
+input,select{padding:7px;border:1px solid var(--ln);border-radius:7px;background:var(--bg);color:var(--tx);font-size:.98rem;max-width:100%}input{width:120px}
+button{padding:8px 16px;border:0;border-radius:7px;background:var(--rs);color:#fff;font-weight:600;cursor:pointer;margin:4px 6px 4px 0;font-size:.93rem}button.g{background:var(--cd);color:var(--tx);border:1px solid var(--ln)}button:disabled{opacity:.5}
+.kp{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.kp label{font-weight:600}
+.st{display:grid;grid-template-columns:58px 1fr;gap:10px;margin:7px 0;padding:8px 12px;background:var(--cd);border-radius:8px;border-left:5px solid var(--ac)}.st.c1{border-left-color:var(--c1)}.st.c2{border-left-color:var(--c2)}
+.lb{font-family:Consolas,monospace;font-size:1.02rem;color:var(--ac)}.st.c1 .lb{color:var(--c1)}.st.c2 .lb{color:var(--c2)}
+.sy{font-size:.8rem;color:var(--mu)}.nm{font-family:Consolas,monospace;word-break:break-word}
+.rs{background:var(--rs);color:#fff;padding:1px 10px;border-radius:999px;font-weight:700}
+.er{color:var(--er);font-weight:600;margin:6px 0}.ok{color:var(--ok);font-weight:700}.mu{color:var(--mu);font-size:.9rem}
+.f{font-family:Consolas,monospace;background:var(--cd);padding:1px 6px;border-radius:5px}
+details{margin-top:8px;border:1px dashed var(--ln);border-radius:8px;padding:6px 12px;font-size:.92rem}summary{cursor:pointer;color:var(--ac);font-weight:600}
+.eq{font-family:Consolas,monospace;background:var(--card);border:1px solid var(--ln);border-radius:6px;padding:4px 9px;margin:4px 0;word-break:break-word}
+table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border:1px solid var(--ln);padding:5px 8px;text-align:left}th{background:var(--cd)}.sc{overflow-x:auto}.nw td,.nw th{white-space:nowrap}
+.opt{display:block;width:100%;text-align:left;background:var(--cd);color:var(--tx);border:1px solid var(--ln);font-weight:500}.opt.ok{background:var(--ok);color:#fff}.opt.bad{background:var(--er);color:#fff}
+.bt{display:flex;justify-content:space-between}
+dialog{border:1px solid var(--ln);border-radius:10px;background:var(--card);color:var(--tx);max-width:460px}dialog::backdrop{background:#0007}
+@media(max-width:760px){.lay{grid-template-columns:1fr}aside{position:static}nav{display:flex;flex-wrap:wrap;gap:5px}nav button{width:auto;margin:0}nav b{display:none}.st{grid-template-columns:1fr;gap:2px}}
+@media print{#les-test{display:none!important}aside,.bt,.hd button,button:not(.opt),.kp button{display:none!important}.les{display:block!important}.lay{display:block}.card{break-inside:avoid}.hd{background:none;color:#000;border-bottom:2px solid #000}details{display:none}}
+</style>
+</head>
+<body>
+<div class="hd"><div><h1>ElGamal shifrlash algoritmi</h1><div class="sub">Interaktiv o'quv qo'llanma · Kriptografiya asoslari</div></div><div><button onclick="hs()">Hisobotni yuklab olish</button> <button onclick="print()">Chop etish</button></div></div>
+<div class="stu">Talaba (F.I.Sh.): <input id="fio" onchange="variant()"> Guruh: <input id="grp" style="width:110px" onchange="variant()"> Sana: <span id="dt"></span> <b id="vr"></b></div>
+
+<div class="lay">
+<aside><nav id="nav"></nav><div class="prog"><i id="pb"></i></div></aside>
+<main>
+<div class="card kp"><b>Parametrlar:</b>
+  <label>p: <select id="sp" onchange="pch()"><option>23</option><option selected>467</option><option>1009</option><option>2003</option><option>5003</option><option>10007</option></select></label>
+  <label>x: <input id="sx" type="number" value="127" oninput="upd()"></label>
+  <button class="g" onclick="$('sx').value=rnd(P);upd()">Tasodifiy x</button>
+  <div id="kp" style="flex-basis:100%"></div></div>
+
+<section class="les card"><h2>1. Kirish va asosiy tushunchalar</h2>
+<div class="goal"><b>O'quv maqsadi.</b><ul><li>Ochiq kalitli kriptografiya g'oyasini tushuntirish</li><li>Diskret logarifm masalasi nima ekanini bilish</li><li>Modul arifmetikasida daraja hisoblashni o'zlashtirish</li></ul></div>
+<p><b>ElGamal</b> algoritmi 1985-yilda Taher ElGamal tomonidan taklif qilingan <b>asimmetrik (ochiq kalitli)</b> shifrlash sxemasidir. Unda ikki xil kalit ishlatiladi: <b>ochiq kalit</b> (hammaga ma'lum, shifrlash uchun) va <b>maxfiy kalit</b> (faqat qabul qiluvchida, deshifrlash uchun). Shu sababli tomonlar oldindan umumiy parol kelishib olishi shart emas.</p>
+<h3>Xavfsizlik asosi: diskret logarifm masalasi</h3>
+<p>Tub son <i>p</i>, generator <i>g</i> va <i>y</i> berilgan bo'lsa, quyidagi tenglamadan <i>x</i> ni topish:</p>
+<div class="fm">g<sup>x</sup> ≡ y (mod p)</div>
+<p>Daraja hisoblash (<i>x</i> berilgan, <i>y</i> kerak) tez bajariladi, teskari masala (<i>y</i> berilgan, <i>x</i> kerak) esa katta <i>p</i> da amalda hal qilib bo'lmaydi. Shu bir tomonlama xossa ElGamal xavfsizligini ta'minlaydi.</p>
+<div class="lab"><b>Laboratoriya 1. Bir tomonlama amal.</b> Yuqoridagi <i>p</i> va <i>g</i> bilan:<br>
+x = <input id="d1" type="number" value="100" oninput="upd()"> &rarr; <span id="d1o" class="nm"></span><br>
+<button onclick="brute()">Teskari masalani yechish: y dan x ni qidirish</button><div id="d1b" class="mu"></div></div>
+<div class="key"><b>Eslab qoling:</b> ochiq kalit shifrlaydi, maxfiy kalit ochadi. Xavfsizlik g<sup>x</sup> mod p ning teskarisini topish qiyinligiga tayanadi.</div></section>
+
+<section class="les card"><h2>2. Kalitlarni generatsiya qilish</h2>
+<div class="goal"><b>O'quv maqsadi.</b> Qabul qiluvchi tomonidan ochiq va maxfiy kalit juftligini yaratishni o'rganish.</div>
+<ol><li>Katta tub son <i>p</i> tanlanadi.</li><li><i>p</i> modulidagi generator (primitiv ildiz) <i>g</i> tanlanadi.</li><li>Maxfiy kalit <i>x</i> tanlanadi: 1 &lt; x &lt; p − 1.</li><li>Ochiq kalit hisoblanadi:</li></ol>
+<div class="fm">y = g<sup>x</sup> mod p</div>
+<p><b>Ochiq kalit:</b> (p, g, y). <b>Maxfiy kalit:</b> x.</p>
+<div class="lab"><b>Laboratoriya 2.</b> Yuqoridagi panelda <i>p</i> va <i>x</i> ni o'zgartirib, kalitlar qanday o'zgarishini kuzating.<div id="l2"></div></div>
+<div class="key"><b>Eslab qoling:</b> p, g, y e'lon qilinadi; x hech qachon oshkor qilinmaydi.</div></section>
+
+<section class="les card"><h2>3. Shifrlash</h2>
+<div class="goal"><b>O'quv maqsadi.</b> Xabarni ochiq kalit yordamida shifrmatnga aylantirish.</div>
+<p>Jo'natuvchi xabar <i>M</i> (1 ≤ M &lt; p) uchun tasodifiy <i>k</i> (1 &lt; k &lt; p − 1) tanlaydi va ikki son hisoblaydi:</p>
+<div class="fm">C<sub>1</sub> = g<sup>k</sup> mod p, &nbsp;&nbsp; C<sub>2</sub> = M · y<sup>k</sup> mod p</div>
+<p>Shifrmatn: (C<sub>1</sub>, C<sub>2</sub>). Har bir xabar uchun <i>k</i> yangidan tanlanadi.</p>
+<div class="lab"><b>Laboratoriya 3.</b><br>M: <input id="m" type="number" value="100" oninput="upd()"> &nbsp; k: <input id="k" type="number" value="153" oninput="upd()">
+<button class="g" onclick="$('k').value=rnd(P);upd()">Tasodifiy k</button><div id="l3"></div></div>
+<div class="key"><b>Eslab qoling:</b> shifrmatn ikki sondan iborat, ya'ni ochiq matndan 2 baravar katta. Bir xil M har safar boshqa shifrmatn beradi.</div></section>
+
+<section class="les card"><h2>4. Deshifrlash</h2>
+<div class="goal"><b>O'quv maqsadi.</b> Maxfiy kalit yordamida shifrmatndan xabarni tiklash va teskari son tushunchasini o'zlashtirish.</div>
+<p>Qabul qiluvchi umumiy sirni hisoblaydi, so'ng xabarni tiklaydi:</p>
+<div class="fm">s = C<sub>1</sub><sup>x</sup> mod p, &nbsp;&nbsp; M = C<sub>2</sub> · s<sup>−1</sup> mod p</div>
+<p>Bu yerda <i>s</i><sup>−1</sup> — <i>s</i> ning <i>p</i> modulidagi teskari soni: s · s<sup>−1</sup> ≡ 1 (mod p). U kengaytirilgan Evklid algoritmi bilan topiladi.</p>
+<div class="lab"><b>Laboratoriya 4.</b> 3-laboratoriyadagi <i>M</i> va <i>k</i> bo'yicha olingan shifrmatn deshifrlanadi.<div id="l4"></div></div>
+<div class="key"><b>Eslab qoling:</b> deshifrlash uchun maxfiy kalit x zarur. Teskari son faqat p tub bo'lganda mavjud.</div></section>
+
+<section class="les card"><h2>5. To'g'rilik isboti va xavfsizlik</h2>
+<div class="goal"><b>O'quv maqsadi.</b> Algoritm nima uchun to'g'ri ishlashini isbotlash va tipik xatolarni bilish.</div>
+<h3>To'g'rilik isboti</h3>
+<div class="fm">C<sub>1</sub><sup>x</sup> = (g<sup>k</sup>)<sup>x</sup> = g<sup>kx</sup>, &nbsp;&nbsp; y<sup>k</sup> = (g<sup>x</sup>)<sup>k</sup> = g<sup>kx</sup></div>
+<p>Demak, <i>s</i> = y<sup>k</sup>. Chunki C<sub>2</sub> = M · s, uni s<sup>−1</sup> ga ko'paytirsak M qaytadi.</p>
+<h3>Amaliy tavsiyalar</h3>
+<div class="sc"><table><tr><th>Masala</th><th>Tavsiya</th></tr>
+<tr><td>p ning o'lchami</td><td>Kamida 2048 bit</td></tr>
+<tr><td>k tanlash</td><td>Kriptografik tasodifiy, har bir xabar uchun yangi, maxfiy</td></tr>
+<tr><td>Tahrirga chidamlilik</td><td>Sxema "malleable": shifrmatnni o'zgartirib, ochiq matnni oldindan bilinadigan tarzda o'zgartirish mumkin, shuning uchun yaxlitlik tekshiruvi (imzo, MAC) kerak</td></tr></table></div>
+<div class="lab"><b>Laboratoriya 5. k ni qayta ishlatish xavfi.</b> Ikki xabar 3-laboratoriyadagi bir xil <i>k</i> bilan shifrlansin:<br>
+M1: <input id="m1" type="number" value="7" oninput="upd()"> &nbsp; M2: <input id="m2" type="number" value="9" oninput="upd()"><div id="l5"></div></div>
+<div class="key"><b>Eslab qoling:</b> k qayta ishlatilsa, bir xabarni bilgan hujumchi boshqasini topadi.</div></section>
+
+<section class="les card"><h2>6. Matn bilan laboratoriya</h2>
+<div class="goal"><b>O'quv maqsadi.</b> Algoritmni haqiqiy matnga qo'llash: har bir belgi Unicode kodiga aylantirilib, alohida <i>k</i> bilan shifrlanadi.</div>
+<div class="lab"><b>Laboratoriya 6.</b> (p = 10007, alohida kalitlar bilan)<br><input id="tx" style="width:260px" value="Salom, dunyo!"> <button onclick="matn()">Shifrla va deshifrla</button><div id="l6"></div></div></section>
+
+<section class="les card" id="les-test"><h2>7. Bilimni tekshirish</h2><p class="mu">Har safar 5 ta savol tasodifiy tuziladi (sonlar ham yangidan olinadi, variantlar aralashtiriladi). Test natijasi hisobotga va chop etishga kiritilmaydi.</p><div id="qz"></div><div id="sc" class="ok"></div><button class="g" onclick="qinit()">Qaytadan topshirish</button></section>
+
+<div class="bt"><button class="g" id="pv" onclick="go(cur-1)">&larr; Oldingi</button><button id="nx" onclick="go(cur+1)">Keyingi &rarr;</button></div>
+</main></div>
+
+<dialog id="dlg"><h3 style="margin-top:0">Hisobotni qaysi formatda yuklab olasiz?</h3>
+<p class="mu">Hisobotga F.I.Sh., kalitlar, laboratoriya hisoblari (teskari son bilan), matn tajribasi va test natijasi kiradi.</p>
+<button onclick="yuklab('doc')">Word (.doc)</button><button onclick="yuklab('pdf')">PDF</button><button class="g" onclick="$('dlg').close()">Bekor qilish</button><div id="ds" class="mu"></div></dialog>
+
+<script>
+const $=id=>document.getElementById(id);
+const pm=(a,b,m)=>{let r=1n;a%=m;while(b>0n){if(b&1n)r=r*a%m;a=a*a%m;b>>=1n}return r};
+const ko=c=>c<0n?`(${c})`:`${c}`;
+const rnd=P=>BigInt(2+Math.floor(Math.random()*(Number(P)-3)));
+const er=t=>`<div class="er">${t}</div>`;
+const st=(n,f,s,r,k='',x='')=>`<div class="st ${k}"><b class="lb">${n}</b><div><div class="sy">${f}</div><div class="nm">${s?s+' = ':''}<span class="rs">${r}</span></div>${x}</div></div>`;
+const rd=(id,lo,hi)=>{const v=$(id).value.trim();if(!/^\d+$/.test(v))return null;const b=BigInt(v);return b>=lo&&b<=hi?b:null};
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const fct=n=>{const f=[];for(let i=2;i*i<=n;i++)if(n%i===0){f.push(i);while(n%i===0)n/=i}if(n>1)f.push(n);return f};
+const gen=p=>{const n=Number(p)-1,f=fct(n);for(let g=2;g<=n;g++)if(f.every(q=>pm(BigInt(g),BigInt(n/q),p)!==1n))return BigInt(g)};
+
+// Teskari son: bo'lish (Evklid) + orqaga qo'yish
+function inv(s,p){
+  if(s===1n)return{inv:1n,bo:[],orq:[],S:1n};
+  const r=[p,s],q=[0n];
+  while(r[r.length-1]!==1n){const i=r.length-1;q[i]=r[i-1]/r[i];r.push(r[i-1]-q[i]*r[i])}
+  const n=r.length-1,bo=[],orq=[`1 = ${r[n-2]} − ${q[n-1]}·${r[n-1]}`];
+  let L=1n,R=-q[n-1];
+  for(let j=n-1;j>=2;j--){const c=q[j-1],yL=R,yR=L-R*c;
+    orq.push(`${r[j]} = ${r[j-2]} − ${c}·${r[j-1]} ni qo'yamiz: 1 = ${ko(yL)}·${r[j-2]} + ${ko(yR)}·${r[j-1]}`);L=yL;R=yR}
+  for(let i=1;i<=n-1;i++)bo.push(`${r[i-1]} = ${q[i]} · ${r[i]} + ${r[i+1]}`);
+  return{inv:((R%p)+p)%p,bo,orq,P:L,S:R}
+}
+function invBlok(s,p,T){
+  if(!T.bo.length)return'';
+  return `<details><summary>${T.inv} qayerdan chiqdi?</summary>
+  <p class="mu">${s} · ? ≡ 1 (mod ${p}) bo'ladigan son kerak. Avval qoldiqli bo'lamiz (qoldiq 1 bo'lguncha):</p>
+  ${T.bo.map(x=>`<div class="eq">${x}</div>`).join('')}
+  <p class="mu">Orqaga yurib, 1 ni ${p} va ${s} orqali yozamiz:</p>
+  ${T.orq.map(x=>`<div class="eq">${x}</div>`).join('')}
+  <p class="mu">Natija: <b>1 = ${ko(T.P)}·${p} + ${ko(T.S)}·${s}</b>. ${p} li qism mod ${p} da yo'qoladi, demak ${ko(T.S)}·${s} ≡ 1.
+  ${T.S<0n?`${T.S} manfiy, shuning uchun ${p} ni qo'shamiz: ${T.S} + ${p} = ${T.inv}.`:''}</p></details>`
+}
+function gBlok(){
+  const n=P-1n;
+  return `<details><summary>g = ${G} generator ekanligi qanday tekshirildi?</summary><p class="mu">p − 1 = ${n} ning tub bo'luvchilari: ${fct(Number(n)).join(', ')}. Har biri uchun g^((p−1)/q) mod p ≠ 1 bo'lsa, g generator.</p>`+
+   fct(Number(n)).map(q=>`<div class="eq">${G}^(${n}/${q}) mod ${P} = ${pm(G,n/BigInt(q),P)} ≠ 1 ✓</div>`).join('')+`</details>`
+}
+
+let P=467n,G=2n,X=127n,Y=1n,cur=0,okM=false,R=null,L6=null,VAR=null;
+function pch(){P=BigInt($('sp').value);if(X>P-2n)X=rnd(P);$('sx').value=X;$('m').value=7;$('k').value=rnd(P);$('m1').value=7;$('m2').value=9;upd()}
+
+function upd(){
+  P=BigInt($('sp').value);G=gen(P);
+  const x=rd('sx',2n,P-2n);if(x!==null)X=x;
+  Y=pm(G,X,P);
+  $('kp').innerHTML=(x===null?er(`x 2 va ${P-2n} orasida bo'lishi kerak (oxirgi to'g'ri qiymat ishlatilmoqda)`):'')+`g = <b>${G}</b>, y = g^x mod p = ${G}^${X} mod ${P} = <span class="rs">${Y}</span>`;
+  const a=rd('d1',1n,10n**9n);$('d1o').innerHTML=a===null?er('Musbat son kiriting'):`${G}^${a} mod ${P} = <span class="rs">${pm(G,a,P)}</span>`;
+  $('l2').innerHTML=st('p','Tub son (ochiq)','',P)+st('g','Generator (ochiq)','',G,'',gBlok())+st('x','Maxfiy kalit','',X)+st('y','Ochiq kalit: y = g^x mod p',`${G}^${X} mod ${P}`,Y)+
+    `<div class="ok">Ochiq kalit: (p, g, y) = (${P}, ${G}, ${Y})</div><div class="ok">Maxfiy kalit: x = ${X}</div>`;
+  const M=rd('m',1n,P-1n),k=rd('k',2n,P-2n);okM=M!==null&&k!==null;
+  if(!okM){R=null;const e=er(`M 1 dan ${P-1n} gacha, k 2 dan ${P-2n} gacha bo'lishi kerak`);$('l3').innerHTML=e;$('l4').innerHTML=e;$('l5').innerHTML=e;return}
+  const yk=pm(Y,k,P),C1=pm(G,k,P),C2=M*yk%P;R={M,k,yk,C1,C2};
+  $('l3').innerHTML=st('C1','C1 = g^k mod p',`${G}^${k} mod ${P}`,C1,'c1')+st('y^k','y^k mod p (C2 uchun kerak)',`${Y}^${k} mod ${P}`,yk)+st('C2','C2 = M · y^k mod p',`${M} · ${yk} mod ${P}`,C2,'c2')+
+    `<div class="ok">Shifrmatn: (${C1}, ${C2})</div>`;
+  const s=pm(C1,X,P),T=inv(s,P),Mr=C2*T.inv%P;R.s=s;R.T=T;R.Mr=Mr;
+  $('l4').innerHTML=`<div class="mu">Qabul qilingan shifrmatn: (C1, C2) = (${C1}, ${C2})</div>`+st('s','s = C1^x mod p',`${C1}^${X} mod ${P}`,s,'c1')+
+    st('s⁻¹','Teskari son: s · s⁻¹ ≡ 1 (mod p)',`${s}⁻¹ mod ${P}`,T.inv,'',`<div class="mu">Tekshiruv: ${s} · ${T.inv} mod ${P} = ${s*T.inv%P} ✓</div>`+invBlok(s,P,T))+
+    st('M','M = C2 · s⁻¹ mod p',`${C2} · ${T.inv} mod ${P}`,Mr,'c2')+`<div class="${Mr===M?'ok':'er'}">${Mr===M?`Tiklangan M = ${Mr}, asl xabar bilan bir xil ✓`:'Xatolik!'}</div>`;
+  const m1=rd('m1',1n,P-1n),m2=rd('m2',1n,P-1n);
+  if(m1===null||m2===null){$('l5').innerHTML=er(`M1 va M2 1 dan ${P-1n} gacha bo'lsin`);return}
+  const a1=m1*yk%P,a2=m2*yk%P,i1=inv(a1,P).inv,g2=a2*i1%P*m1%P;R.d={m1,m2,a1,a2,i1,g2};
+  $('l5').innerHTML=`<div class="eq">Bir xil k = ${k} bilan: C2(1) = ${a1}, C2(2) = ${a2}</div>
+    <div class="eq">Hujumchi M1 = ${m1} ni biladi: M2 = C2(2) · C2(1)⁻¹ · M1 mod ${P} = ${a2} · ${i1} · ${m1} mod ${P} = <span class="rs">${g2}</span></div>
+    ${g2===m2?`<div class="er">Hujumchi M2 = ${m2} ni topdi. Demak, k qayta ishlatilmasligi shart.</div>`:''}`
+}
+
+function brute(){
+  let c=1n,z=G%P;while(z!==Y&&c<=P){z=z*G%P;c++}
+  $('d1b').innerHTML=`y = ${Y} ni topish uchun x ni birma-bir sinab, <b>${c}</b> ta urinish kerak bo'ldi (x = ${c}). Hozirgi p kichik, shuning uchun tez. Amalda p ≈ 2<sup>2048</sup> bo'lib, bunday qidiruv imkonsiz.`
+}
+
+// 6. Matn bilan laboratoriya
+const P6=10007n,G6=gen(P6),X6=rnd(P6),Y6=pm(G6,X6,P6);
+function matn(){
+  const t=Array.from($('tx').value);if(!t.length){$('l6').innerHTML=er('Matn kiriting');return}
+  const kod=t.map(h=>h.codePointAt(0));
+  if(Math.max(...kod)>=10007){$('l6').innerHTML=er('Matnda kodi 10007 dan katta belgi bor. Oddiyroq belgilar kiriting.');return}
+  let ds='',rows='';
+  t.forEach((h,i)=>{const M=BigInt(kod[i]),k=rnd(P6),c1=pm(G6,k,P6),c2=M*pm(Y6,k,P6)%P6;
+    const s=pm(c1,X6,P6),m=c2*inv(s,P6).inv%P6,hh=String.fromCodePoint(Number(m));
+    rows+=`<tr><td>${h===' '?'␣':esc(h)}</td><td>${M}</td><td>${k}</td><td>(${c1}, ${c2})</td><td>${s}</td><td>${m} → ${hh===' '?'␣':esc(hh)}</td></tr>`;ds+=hh});
+  L6={kalit:`p = ${P6}, g = ${G6}, x = ${X6}, y = ${Y6}`,rows,ds,ok:ds===$('tx').value,tx:$('tx').value};
+  $('l6').innerHTML=`<p class="mu">Kalitlar: p = ${P6}, g = ${G6}, x = ${X6}, y = ${Y6}</p><div class="sc"><table class="nw"><tr><th>Belgi</th><th>M</th><th>k</th><th>(C1, C2)</th><th>s</th><th>Tiklandi</th></tr>${rows}</table></div>
+    <p>Deshifrlangan matn: <span class="f">${esc(ds)}</span> <span class="${ds===$('tx').value?'ok':'er'}">${ds===$('tx').value?'✓ mos':'mos emas'}</span></p>`
+}
+
+// 7. Test
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const SP=[11,13,17,19,23,29,31];
+const kons=(q,t,w,e)=>{const o=sh([t,...w]);return[q,o,o.indexOf(t),e]};
+function son(q,c,p,e){const z=new Set([String(c)]);while(z.size<4)z.add(String(ri(1,p-1)));const o=sh([...z]);return[q,o,o.indexOf(String(c)),e]}
+const POOL=[
+ ()=>kons('ElGamal da qaysi kalit maxfiy saqlanadi?','x',['y','g','p'],"x faqat qabul qiluvchida bo'ladi; p, g, y ochiq."),
+ ()=>kons('Algoritm xavfsizligi nimaga asoslangan?','Diskret logarifm masalasi',['Belgilarni almashtirish',"Kalitni yashirib qo'yish","Qisqa sonlarni ko'paytirish"],'g^x mod p ni hisoblash oson, x ni topish juda qiyin.'),
+ ()=>kons('Nega har bir xabar uchun yangi k tanlanadi?',"k qayta ishlatilsa, xabarlar orasidagi bog'liqlik ochiladi",['Chiroyli chiqishi uchun','Hisob tezlashadi','Shart emas'],"5-laboratoriya shuni ko'rsatdi."),
+ ()=>kons('Shifrmatn ochiq matndan necha baravar katta?','2',['1','4','8'],'Har bir M uchun ikki son: C1 va C2.'),
+ ()=>kons('Deshifrlashda s qanday hisoblanadi?','s = C1^x mod p',['s = C2^x mod p','s = g^y mod p','s = M^k mod p'],'s = C1^x = g^(kx) mod p.'),
+ ()=>kons("Amalda p kamida necha bit bo'lishi tavsiya etiladi?",'2048',['64','256','1024'],'Zamonaviy tavsiya: kamida 2048 bit.'),
+ ()=>kons("ElGamal qaysi turdagi algoritm?","Asimmetrik (ochiq kalitli)",["Simmetrik","Xesh-funksiya","Oqimli shifr"],"Ikki xil kalit ishlatiladi: ochiq va maxfiy."),
+ ()=>{const p=SP[ri(0,6)],g=gen(BigInt(p)),x=ri(2,p-2),y=pm(g,BigInt(x),BigInt(p));return son(`p = ${p}, g = ${g}, maxfiy kalit x = ${x}. Ochiq kalit y = g^x mod p nechaga teng?`,y,p,`${g}^${x} mod ${p} = ${y}`)},
+ ()=>{const p=SP[ri(0,6)],g=gen(BigInt(p)),k=ri(2,p-2),c=pm(g,BigInt(k),BigInt(p));return son(`p = ${p}, g = ${g}, k = ${k}. C1 = g^k mod p nechaga teng?`,c,p,`${g}^${k} mod ${p} = ${c}`)},
+ ()=>{const p=SP[ri(0,6)],y=ri(2,p-1),M=ri(2,p-1),k=ri(2,p-2),c=BigInt(M)*pm(BigInt(y),BigInt(k),BigInt(p))%BigInt(p);return son(`p = ${p}, y = ${y}, M = ${M}, k = ${k}. C2 = M · y^k mod p nechaga teng?`,c,p,`${y}^${k} mod ${p} = ${pm(BigInt(y),BigInt(k),BigInt(p))}; ${M} · shu son mod ${p} = ${c}`)},
+ ()=>{const p=SP[ri(0,6)],a=ri(2,p-1),t=inv(BigInt(a),BigInt(p)).inv;return son(`p = ${p}, s = ${a}. s ga teskari son s⁻¹ (s · s⁻¹ ≡ 1 mod p) nechaga teng?`,t,p,`${a} · ${t} mod ${p} = ${BigInt(a)*t%BigInt(p)}`)},
+ ()=>{const p=SP[ri(0,6)],a=ri(2,p-1),c2=ri(1,p-1),t=inv(BigInt(a),BigInt(p)).inv,M=BigInt(c2)*t%BigInt(p);return son(`p = ${p}, s = ${a}, C2 = ${c2}. M = C2 · s⁻¹ mod p nechaga teng?`,M,p,`s⁻¹ = ${t}; ${c2} · ${t} mod ${p} = ${M}`)}
+];
+const quiz=()=>sh(POOL.map((_,i)=>i)).slice(0,5).map(i=>POOL[i]());
+let QS=[],ball=0,jav=0;
+function qinit(){ball=0;jav=0;QS=quiz();$('sc').textContent='';
+  $('qz').innerHTML=QS.map((q,i)=>`<div class="lab" id="q${i}"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<button class="opt" onclick="jv(${i},${j},this)">${o}</button>`).join('')}<div class="mu"></div></div>`).join('')}
+function jv(i,j,b){
+  const bx=$('q'+i),q=QS[i];if(bx.dataset.d)return;bx.dataset.d=1;jav++;
+  bx.querySelectorAll('.opt')[q[2]].classList.add('ok');if(j===q[2])ball++;else b.classList.add('bad');
+  bx.querySelector('.mu').textContent=q[3];if(jav===QS.length)$('sc').textContent=`Natija: ${ball} / ${QS.length}`
+}
+
+
+
+// Talaba varianti: F.I.Sh. va guruhdan har bir talabaga o'ziga xos (lekin takrorlanadigan) qiymatlar
+function h32(t){let h=2166136261;for(const c of t){h^=c.codePointAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function mb(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function variant(){
+  const f=$('fio').value.trim().toLowerCase().replace(/\s+/g,' '),g=$('grp').value.trim().toLowerCase();
+  if(!f){VAR=null;$('vr').textContent='';return}
+  const h=h32(f+'|'+g),r=mb(h),pr=[467,1009,2003,5003,10007];
+  VAR=h%9000+1000;$('sp').value=pr[Math.floor(r()*pr.length)];P=BigInt($('sp').value);
+  const n=Number(P),q=(a,b)=>a+Math.floor(r()*(b-a+1));
+  const m1=q(2,n-1);
+  $('sx').value=q(2,n-2);$('m').value=q(10,n-1);$('k').value=q(2,n-2);$('m1').value=m1;$('m2').value=m1%(n-1)+1;
+  $('vr').textContent='Variant № '+VAR;upd()
+}
+
+// ---------- Hisobot (Word / PDF) ----------
+function hisobotHTML(){
+  const fio=esc($('fio').value.trim()),grp=esc($('grp').value.trim()),dt=$('dt').textContent;
+  const TB='border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;width:100%"';
+  const h=t=>`<h3 style="color:#27408b;margin:16px 0 4px">${t}</h3>`,p=t=>`<p style="margin:3px 0">${t}</p>`;
+  let b=`<h1 style="text-align:center;margin:0">Laboratoriya hisoboti</h1><h2 style="text-align:center;margin:2px 0 12px">ElGamal shifrlash algoritmi</h2>
+  ${p(`<b>Talaba:</b> ${fio} &nbsp;&nbsp; <b>Guruh:</b> ${grp} &nbsp;&nbsp; <b>Sana:</b> ${dt}${VAR?` &nbsp;&nbsp; <b>Variant:</b> №${VAR}`:''}`)}`;
+  b+=h('1. Kalitlarni generatsiya qilish')+`<table ${TB}><tr><th>Parametr</th><th>Qiymat</th><th>Izoh</th></tr>
+   <tr><td>p</td><td>${P}</td><td>tub son (ochiq)</td></tr><tr><td>g</td><td>${G}</td><td>generator (ochiq)</td></tr>
+   <tr><td>x</td><td>${X}</td><td>maxfiy kalit</td></tr><tr><td>y</td><td>${Y}</td><td>y = g^x mod p = ${G}^${X} mod ${P}</td></tr></table>
+   ${p(`<b>Ochiq kalit:</b> (p, g, y) = (${P}, ${G}, ${Y}). <b>Maxfiy kalit:</b> x = ${X}.`)}`;
+  if(R){
+    b+=h('2. Shifrlash')+p(`Xabar M = ${R.M}, tasodifiy k = ${R.k}`)+p(`C1 = g^k mod p = ${G}^${R.k} mod ${P} = <b>${R.C1}</b>`)+
+      p(`y^k mod p = ${Y}^${R.k} mod ${P} = ${R.yk}`)+p(`C2 = M · y^k mod p = ${R.M} · ${R.yk} mod ${P} = <b>${R.C2}</b>`)+p(`<b>Shifrmatn: (${R.C1}, ${R.C2})</b>`);
+    const T=R.T;
+    b+=h('3. Deshifrlash')+p(`s = C1^x mod p = ${R.C1}^${X} mod ${P} = <b>${R.s}</b>`)+
+      p(`s⁻¹ mod ${P} = <b>${T.inv}</b> (tekshiruv: ${R.s} · ${T.inv} mod ${P} = ${R.s*T.inv%P})`);
+    if(T.bo.length)b+=p('<i>s⁻¹ qanday topildi (Evklid algoritmi):</i>')+T.bo.map(p).join('')+p('<i>Orqaga qo\'yish:</i>')+T.orq.map(p).join('')+
+      p(`1 = ${ko(T.P)}·${P} + ${ko(T.S)}·${R.s}, demak s⁻¹ = ${T.inv}`);
+    b+=p(`M = C2 · s⁻¹ mod p = ${R.C2} · ${T.inv} mod ${P} = <b>${R.Mr}</b>`)+p(R.Mr===R.M?`Tiklangan xabar asl xabar bilan bir xil (M = ${R.M}).`:'Xatolik: xabar mos kelmadi.');
+    if(R.d){const d=R.d;b+=h('4. k ni qayta ishlatish xavfi')+p(`Bir xil k = ${R.k} bilan M1 = ${d.m1} va M2 = ${d.m2} shifrlandi: C2(1) = ${d.a1}, C2(2) = ${d.a2}.`)+
+      p(`Hujumchi M1 ni bilsa: M2 = C2(2) · C2(1)⁻¹ · M1 mod ${P} = ${d.a2} · ${d.i1} · ${d.m1} mod ${P} = <b>${d.g2}</b>. Demak, k har safar yangi bo'lishi kerak.`)}
+  } else b+=h('2-4. Shifrlash, deshifrlash')+p('Laboratoriya 3 uchun M va k to\'g\'ri kiritilmagan.');
+  b+=h('5. Matn bilan tajriba');
+  b+=L6?p(`Kiritilgan matn: <b>${esc(L6.tx)}</b>. Kalitlar: ${L6.kalit}`)+`<table ${TB}><tr><th>Belgi</th><th>M</th><th>k</th><th>(C1, C2)</th><th>s</th><th>Tiklandi</th></tr>${L6.rows}</table>`+
+     p(`Deshifrlangan matn: <b>${esc(L6.ds)}</b> (${L6.ok?'asl matn bilan mos':'mos emas'})`):p('Bajarilmagan.');
+  b+=h('6. Xulosa')+p("Ishda ElGamal ochiq kalitli shifrlash algoritmi o'rganildi: kalitlar generatsiya qilindi, xabar shifrlandi va maxfiy kalit yordamida qayta tiklandi. Algoritm xavfsizligi diskret logarifm masalasining murakkabligiga asoslanishi, shuningdek k ning har bir xabar uchun yangi tanlanishi shartligi amalda ko'rsatildi.");
+  return b
+}
+function hs(){
+  if(!$('fio').value.trim()){alert("Avval sahifa tepasidagi F.I.Sh. maydonini to'ldiring.");$('fio').focus();return}
+  $('ds').textContent='';$('dlg').showModal()
+}
+function saqla(blob,nom){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nom;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000)}
+function chopOyna(body){const w=open('','_blank');if(!w){$('ds').textContent="Brauzer yangi oynani blokladi. Ruxsat bering yoki sahifadagi 'Chop etish' tugmasidan foydalaning.";return}
+  w.document.write(`<html><head><meta charset="utf-8"><title>Hisobot</title></head><body style="font-family:Arial;font-size:13px">${body}</body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),400)}
+function yuklab(tur){
+  const body=hisobotHTML(),nom='ElGamal_hisobot_'+($('fio').value.trim().replace(/[^\wА-яЁёʻʼ'-]+/g,'_')||'talaba');
+  if(tur==='doc'){
+    const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>Hisobot</title><style>body{font-family:Calibri,Arial;font-size:12pt}td,th{font-size:11pt}</style></head><body>${body}</body></html>`;
+    saqla(new Blob(['\ufeff',html],{type:'application/msword'}),nom+'.doc');$('ds').textContent='Word fayl yuklab olindi.';return
+  }
+  $('ds').textContent='PDF tayyorlanmoqda...';
+  const yuk=new Promise((ok,no)=>{if(window.html2pdf)return ok();const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';sc.onload=ok;sc.onerror=no;document.head.appendChild(sc)});
+  yuk.then(()=>{const d=document.createElement('div');d.style.cssText='position:absolute;left:-9999px;top:0;width:700px;background:#fff;color:#000;font:13px Arial';d.innerHTML=body;document.body.appendChild(d);
+    return html2pdf().set({margin:12,filename:nom+'.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'},pagebreak:{mode:['css','legacy']}}).from(d).save().then(()=>{d.remove();$('ds').textContent='PDF yuklab olindi.'})})
+   .catch(()=>{$('ds').textContent="PDF kutubxonasini yuklab bo'lmadi (internet kerak). Chop etish oynasi ochiladi: u yerda \"PDF sifatida saqlash\" ni tanlang.";chopOyna(body)})
+}
+
+// Navigatsiya
+const TT=['Kirish','Kalit generatsiyasi','Shifrlash','Deshifrlash',"To'g'rilik va xavfsizlik",'Matn bilan laboratoriya','Test'];
+const les=document.querySelectorAll('.les');
+les.forEach((_,i)=>{const b=document.createElement('button');b.innerHTML=`<b>${i+1}</b>${TT[i]}`;b.onclick=()=>go(i);$('nav').appendChild(b)});
+function go(i){cur=Math.max(0,Math.min(les.length-1,i));les.forEach((l,j)=>l.classList.toggle('on',j===cur));
+  $('nav').querySelectorAll('button').forEach((b,j)=>b.classList.toggle('on',j===cur));
+  $('pb').style.width=((cur+1)/les.length*100)+'%';$('pv').disabled=cur===0;$('nx').disabled=cur===les.length-1;scrollTo(0,0)}
+$('dt').textContent=new Date().toLocaleDateString('ru-RU');
+upd();matn();qinit();go(0);
+</script>
+</body>
+</html>
